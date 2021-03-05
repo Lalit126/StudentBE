@@ -7,8 +7,23 @@ var cors = require('cors')
 app.use(cors())
 
 
-app.get('/', (req, res) => {
-  res.send(data)
+// app.get('/', (req, res) => {
+//   res.send(data)
+// })
+
+
+app.get('/allrecords', (req, res)=> {
+
+  let uuidData = data.map(i=>{
+
+    return {
+
+      ...Id ,
+      Id : uuid4()
+    }
+  })
+
+  res.send(uuidData)
 })
 
 app.listen(port, () => {
