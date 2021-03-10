@@ -5,14 +5,20 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node src/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dot-env": "0.0.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "http-status": "^1.5.0",
+    "mongoose": "^5.11.19",
+    "mongoose-unique-validator": "^2.0.3",
+    "node-env": "^0.1.6",
     "path": "^0.12.7",
     "querystring": "^0.2.1",
     "url": "^0.11.0",
