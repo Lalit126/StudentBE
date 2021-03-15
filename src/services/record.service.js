@@ -2,6 +2,7 @@ const Record = require('../models/record.model');
 
 const createNewRecord = async (input) => {
 //  const {companyName,universityName} =input
+console.log(input,'input');
   const rec = await Record.create(input);
   return rec;
 };
@@ -37,6 +38,15 @@ const searchRecords = async (searchText) => {
 const getAllRecords = async () => {
   const com = await Record
   .find({})
+  .sort({_id:-1})
+  .populate('company',['companyName','careerUrl'])
+  
+  return com;
+};
+
+const getRecordById = async (Id) => {
+  const com = await Record
+  .find({_id:Id})
   .populate('company',['companyName','careerUrl'])
   
   return com;
@@ -49,6 +59,7 @@ if(next_cursor === 'null') {
   console.log('I am in IF LOOP');
    com = await Record
   .find({})
+  .sort({_id:-1})
   .populate('company',['companyName','careerUrl'])
   .limit(limit)
   return com 
@@ -58,6 +69,7 @@ else {
   console.log('I am in ELSE LOOP');
   com = await Record
   .find({ _id: { $gt: next_cursor } })
+  .sort({_id:-1})
   .populate('company',['companyName','careerUrl'])
   .limit(limit)
 }
@@ -103,7 +115,8 @@ module.exports = {
     deleteManyByCompanyId,
     searchRecords,
     getPaginatedRecords,
-    getRecordsByCompanyId
+    getRecordsByCompanyId,
+    getRecordById,
 
    
   };

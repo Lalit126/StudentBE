@@ -50,13 +50,28 @@ const searchCompaniesByKeyWord = async (searchText) => {
 };
 
 
-const searchCompanies = async ({companyName}) => {
-  console.log(companyName,'companyName from SERVICE');
-  const company = await Company.find({companyName});
+const searchCompanies = async (keyword) => {
+  console.log(keyword,'keyword from SERVICE');
+  const regex = new RegExp(keyword,'gmi')
+  const company = await Company.find(
+    {$or:
+  [
+    {companyName :{$regex: regex}},
+    {careerUrl :{$regex: regex}},
+]
+})
+  console.log(company,'company');
   
   return company;
 };
 
+const getCompanyById = async (Id) => {
+  const com = await Company
+  .find({_id:Id})
+  
+  
+  return com;
+};
 
 
 module.exports = {
@@ -67,5 +82,7 @@ module.exports = {
   deleteCompany,
   searchCompanies,
   searchCompaniesByKeyWord,
+  getCompanyById,
    
   };
+  

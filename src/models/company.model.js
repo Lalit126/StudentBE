@@ -7,13 +7,11 @@ const companySchema = mongoose.Schema(
       type: String,
       required: false,
       index: true,
-      unique:true,
+      unique:true
     },
-
     careerUrl: {
       type: String,
-      unique:true
-    }
+    },
   
   },
   {

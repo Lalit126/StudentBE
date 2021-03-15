@@ -6,34 +6,10 @@ const _ = require('lodash')
 
 
 const createNewRecord = async (req, res) => {
-const {companyName,careerUrl,universityName, graduationYear,
-  specialization,jobTitle,jobStartDate} 
-  =req.body
+    const rec = await recordService.createNewRecord(req.body);
+     res.status(httpStatus.CREATED).send(rec);
+  }
 
-const companyInput ={
-  companyName,
-  careerUrl
-}
-let recordInput ={
-    universityName,
-    graduationYear,
-    specialization,
-    jobTitle,
-    jobStartDate
-}
-  const doCompanyExist= await companyService.searchCompanies({companyName});
-let newRecordInput
-if(doCompanyExist.length>0){
-  newRecordInput={...recordInput,company:doCompanyExist[0]._id}
-}
-else {
-  const comp = await companyService.createNewCompany(companyInput);
-  newRecordInput={...recordInput,company:comp._id}
-}
-
-const rec = await recordService.createNewRecord(newRecordInput);
-res.status(httpStatus.CREATED).send(rec);
-};
 
 /////////////************************************************** */
 const createNewFakeRecords = async (req, res) => {
@@ -48,7 +24,7 @@ const createNewFakeRecords = async (req, res) => {
     }
     let recordInput ={
         universityName:`university of ${faker.address.city()}`,
-        graduationYear:2020,
+        graduationDate:2020,
         specialization:faker.commerce.department(),
         jobTitle:faker.name.jobTitle(),
         jobStartDate:faker.date.past()
@@ -78,14 +54,14 @@ const searchRecords = async (req, res) => {
 const {searchText} = req.query
 const comp = await recordService.searchRecords(searchText);
 const compRec = await companyService.searchCompaniesByKeyWord(searchText);
-console.log(compRec);
+// console.log(compRec);
 const accumulateIds =compRec.map(i=>i._id)
-console.log(accumulateIds);
+// console.log(accumulateIds);
 const recsWithKw = await recordService.getRecordsByCompanyId(accumulateIds);
 const mergeRec=[...comp,...recsWithKw]
-console.log(mergeRec,'mergeRec');
+// console.log(mergeRec,'mergeRec');
 const deDupValue=_.uniqBy(mergeRec,'_id')
-console.log(deDupValue,'deDupValue');
+// console.log(deDupValue,'deDupValue');
 res.status(httpStatus.CREATED).send(deDupValue);
   };
 
@@ -94,9 +70,17 @@ res.status(httpStatus.CREATED).send(deDupValue);
 
 
   const editRecord = async (req, res) => {
+    console.log(req.body,'req.body');
     const comp = await recordService.editRecord(req.body);
    console.log(comp,'comp');
   res.status(httpStatus.CREATED).send(comp);
+  };
+
+  const getRecordById = async (req, res) => {
+    const query= req.query
+    const comp = await recordService.getRecordById(query.Id);
+   console.log(comp,'comp');
+  res.status(httpStatus.CREATED).send(comp[0]);
   };
 
 
@@ -122,6 +106,7 @@ module.exports = {
     editRecord,
     createNewFakeRecords,
     searchRecords,
-    getPaginatedRecords
+    getPaginatedRecords,
+    getRecordById,
   
 };
